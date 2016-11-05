@@ -1,0 +1,71 @@
+
+cards = styling
+notes = data
+
+TODO what are models?
+    -When adding note we set model id notes.py:20
+
+Handling duplicates:
+    ="duplicate" means has same main field
+        ~for chinese cards this is chinese characters
+    1. make sure other fields (but not media!) are different
+        ~also check fields (like definitions) for ";"
+            +if present, treat each ";" delimited section as a field
+    2. for fields not the same, combine differences
+        +separate with ";"
+
+
+Steps:
+
+In advance:
++Have utf-8 .txt csv input file 
++Have mostly empty anki collection (.anki2)
+    +only thing inside is just the cards
+
+--phase 1--
+
+Could do this per line to save memory
+{
+1. read info from input file
+    +for simplicity should just be utf-8 .txt csv file
+    +each line becomes a JSON object
+
+2. write objects to .json file
+    +each line 1 json object
+    +do not worry about duplicate values
+}
+
+--phase 2--
+
+1.  copy collection
+    +we reuse base collection anytime we run it
+    =just regularly copy the files
+
+1.5 initialize Collection object
+    +use anki/storage.Collection() to init
+        +just needs path (to copied file)
+    +use this collection for everything now
+
+
+2. ?load all json objects into memory
+    ~need? to do this to check for duplicity
+        -do we though?
+    -alternative is do check as loading into db
+    ~anki may have nicer tools for combining
+        -no it doesn't but easier to check for duplicates that way
+
+2. ? for each json object
+{
+    2.01 create note object (anki/notes.py)
+    2.1  add to db
+        +anki/collection.py: _Collection.addNote()
+    2.15 ? check for duplicity?
+}
+
+3.  export to apkg file 
+    +anki/exporting.py AnkiPackageExplorer.exportFiltered()
+
+
+
+ . export collection to anki package
+
