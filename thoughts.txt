@@ -1,71 +1,28 @@
+NEW IDEA:
 
-cards = styling
-notes = data
++manipulate input.csv into correct format for anki import
+    (anki can import from csv)
 
-TODO what are models?
-    -When adding note we set model id notes.py:20
+rearrange order:
 
-Handling duplicates:
-    ="duplicate" means has same main field
-        ~for chinese cards this is chinese characters
-    1. make sure other fields (but not media!) are different
-        ~also check fields (like definitions) for ";"
-            +if present, treat each ";" delimited section as a field
-    2. for fields not the same, combine differences
-        +separate with ";"
+input order:
+English definition(sometimes multiple with commas in between),
+Chinese character,
+Pinyin ("encoded", numbers and symbols need to be converted to accented chars),
+Word Type (needs to be expanded from n., v., v.-c., etc. into noun, verb,
+    verb-complement, etc.) (could be multiple)
+Lesson Number - always starts with L., change to V3_Ch##
+page number - always starts with p., we can ignore this.
 
-
-Steps:
-
-In advance:
-+Have utf-8 .txt csv input file 
-+Have mostly empty anki collection (.anki2)
-    +only thing inside is just the cards
-
---phase 1--
-
-Could do this per line to save memory
-{
-1. read info from input file
-    +for simplicity should just be utf-8 .txt csv file
-    +each line becomes a JSON object
-
-2. write objects to .json file
-    +each line 1 json object
-    +do not worry about duplicate values
-}
-
---phase 2--
-
-1.  copy collection
-    +we reuse base collection anytime we run it
-    =just regularly copy the files
-
-1.5 initialize Collection object
-    +use anki/storage.Collection() to init
-        +just needs path (to copied file)
-    +use this collection for everything now
+desired output
+Chinese character,
+Pinyin (accented chars)
+English definition (even if multiple, all should be one field)
+Sound? (for now, leave blank maybe but still with a comma?
+Tags (expanded from Word Type), with added V3_Ch## based on Lesson number and a
+    generated tag (could be helpful for debugging later)
 
 
-2. ?load all json objects into memory
-    ~need? to do this to check for duplicity
-        -do we though?
-    -alternative is do check as loading into db
-    ~anki may have nicer tools for combining
-        -no it doesn't but easier to check for duplicates that way
+Things to do:
 
-2. ? for each json object
-{
-    2.01 create note object (anki/notes.py)
-    2.1  add to db
-        +anki/collection.py: _Collection.addNote()
-    2.15 ? check for duplicity?
-}
-
-3.  export to apkg file 
-    +anki/exporting.py AnkiPackageExplorer.exportFiltered()
-
-
-
- . export collection to anki package
 
