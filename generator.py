@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import sys
+import csv
 
 #See thoughts.txt file for expected input format.
 
@@ -52,9 +52,7 @@ def parse_input(input_file):
 
         vocab.append(term)
 
-    # test code pls ignore
-    for word in vocab:
-        print(word["character"], word["meaning"], word["pinyin"]) 
+    dump_dict(vocab, "ouput.csv")
 
     return vocab
 
@@ -84,6 +82,17 @@ def tone_count(word):
             count += 1
 
     return count
+
+def dump_dict(itemarray, filename):
+    """Dumps an array of dictionaries into a .csv file named filename"""
+    # init csv file
+    f = open(filename, 'w')
+    writer = csv.DictWriter(f, fieldnames=list(itemarray[0].keys()))
+    writer.writeheader()
+
+    # write everything in items to csv
+    for rowdata in itemarray:
+        writer.writerow(rowdata)
 
 def load_mappings(filename):
     mapfile = open(filename, "r")
