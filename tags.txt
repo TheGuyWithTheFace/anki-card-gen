@@ -19,3 +19,7 @@ v. verb
 v.-c. verb_complement
 v.-o. verb_object
 n./v. noun verb
+v./n. noun verb
+adv./adj. adverb adjective
+n./adj. noun adjective
+adj./n. noun adjective
