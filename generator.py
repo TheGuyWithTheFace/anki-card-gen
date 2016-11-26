@@ -4,12 +4,16 @@ import csv
 #See thoughts.txt file for expected input format.
 
 _mappings = {}
+_tags = {}
 
 def main():
     global _mappings
+    global _tags
 
     # maps "pinyin chars" (0-9 and symbols) to actual tone such as é and ī
     _mappings = load_mappings("mappings.txt")
+    # maps letters such as n., v., to words such as noun and verb
+    _tags = load_tags("tags.txt")
 
     # For now use hardcoded things, later we'll make a nicer ui maybe
     f = open("input.csv", newline='')
@@ -20,6 +24,8 @@ def parse_input(input_file):
     """Reads input "csv" (not a real csv), returns list of dictionaries."""
 
     vocab = []
+
+    tags = [];
 
     for line in list(input_file):
         items = [x.strip() for x in line.split(',')]
@@ -50,11 +56,31 @@ def parse_input(input_file):
         # pinyin comes right after character
         term["pinyin"] = format_pinyin(items[character_index+1])
 
+        # get all relevant tags
+        i = character_index + 2
+        tags = []
+        while('L' not in items[i]):
+            tags.append(format_tag(items[i]))
+            i += 1
+
+        # Add lesson tag
+        tags.append("V3_Ch" + items[i][3:])
+
+        term["tags"] = ' '.join(tags)
         vocab.append(term)
 
-    dump_dict(vocab, "ouput.csv")
+    dump_dict(vocab, "output.csv")
 
     return vocab
+
+def format_tag(word):
+
+    global _tags
+    if word in _tags:
+        return _tags[word]
+    else:
+        print("WARNING: Unrecognized tag '" + word + "'")
+        return word
 
 def format_pinyin(word):
     """Converts pinyin tone encodings in word to accented characters for readability"""
@@ -93,6 +119,15 @@ def dump_dict(itemarray, filename):
     # write everything in items to csv
     for rowdata in itemarray:
         writer.writerow(rowdata)
+
+def load_tags(filename):
+    tagfile = open(filename, "r")
+    tags = {}
+    for line in tagfile.read().splitlines():
+        line = line.split(' ')
+        tags[line[0]] = ' '.join(line[1:])
+
+    return tags
 
 def load_mappings(filename):
     mapfile = open(filename, "r")

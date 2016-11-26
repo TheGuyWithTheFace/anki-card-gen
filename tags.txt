@@ -1,0 +1,21 @@
+adj. adjective
+adv. adverb
+aux. auxiliary
+AN measure_word
+conj. conjugation
+idm. idiom
+int. interjection
+n. noun
+num. number
+o. object
+part. particle
+phr. phrase
+prefix prefix
+prep. preposition
+pron. pronoun
+s. subject
+suffix suffix
+v. verb
+v.-c. verb_complement
+v.-o. verb_object
+n./v. noun verb
