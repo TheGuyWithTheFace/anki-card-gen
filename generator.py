@@ -27,6 +27,8 @@ def parse_input(input_file):
 
     tags = [];
 
+    currentline = 1
+
     for line in list(input_file):
         items = [x.strip() for x in line.split(',')]
         # Problem: items may have multiple definitions separated by commas
@@ -45,6 +47,7 @@ def parse_input(input_file):
         
         if(character_index == -1):
             print("Error parsing line: " + line)
+            currentline += 1
             continue
 
         term = {}
@@ -64,10 +67,16 @@ def parse_input(input_file):
             i += 1
 
         # Add lesson tag
-        tags.append("V3_Ch" + items[i][3:])
+        lesson = "V3_Ch" + items[i][3:]
+        tags.append(lesson)
 
         term["tags"] = ' '.join(tags)
         vocab.append(term)
+
+        # guess at sound file name
+        term["sound"] = "[sound:" + lesson + "_" + str(currentline) + ".wav]"
+        currentline += 1
+
 
     dump_dict(vocab, "output.csv")
 
